@@ -1,0 +1,242 @@
+<?php
+include "../includes/conexao.php";
+if(isset($_POST['alterar'])){
+	// botão alterar pressionado, validar os dados e fazer o update
+	$nome = addslashes($_POST['nome']);
+	$fabricante = ($_POST['fabricante'] == '') ? 'NULL' : $_POST['fabricante'];
+	$imagem = (empty($_FILES['arquivo']['name']))? 'imagem' : "'{$_FILES['arquivo']['name']}'"; 
+	$descricao = addslashes($_POST['descricao']);
+	$tensao = $_POST['tensao'];
+	$catMarcenaria = isset($_POST['marcenaria'])? 1 : 0;
+	$catJardinagem = isset($_POST['jardinagem'])? 1 : 0;
+	$catLimpeza = isset($_POST['limpeza'])? 1 : 0;
+	$catEscritorio = isset($_POST['escritorio'])? 1 : 0;
+	$catMecanica = isset($_POST['mecanica'])? 1 : 0;
+	$catOutros = isset($_POST['outros'])? 1 : 0;
+	$quantidade = $_POST['quantidade'];
+	$valor = str_replace(",", ".", $_POST['valor']);
+	$desconto = str_replace(",", ".", $_POST['desconto']);
+
+	$erros = array();
+
+	if(empty($nome)){
+		$erros[] = "O nome do produto não pode ser vazio";
+	}
+
+	if($catMarcenaria == 0 & $catJardinagem == 0 & $catLimpeza == 0 & $catEscritorio == 0 & $catMecanica == 0 & $catOutros == 0){
+		$erros[] = "É necessário selecionar pelo menos 1 categoria";
+	}
+
+	if(!is_numeric($valor)){
+		$erros[] = "Valor da locação inválido";
+		$valor = 0;
+	}
+
+	if(!is_numeric($desconto)){
+		$erros[] = "Valor do desconto inválido";
+		$desconto = 0;
+	}
+
+	if($valor - $desconto <=0){
+		$erros[] = "O valor final deve ser maior do que zero";
+	}
+
+	if(!empty($_FILES['arquivo']['name'])){
+		$destino = "../img/produtos/".$_FILES['arquivo']['name'];
+		if(!move_uploaded_file($_FILES['arquivo']['tmp_name'], $destino)){
+			$erros[] = "Falha no upload do arquivo";
+		}
+	}
+
+	if (count($erros) == 0){ // nenhum erro encontrado
+	 	$sql = "UPDATE produto SET nome = '$nome', idFabricante = $fabricante, imagem = $imagem, descricao = '$descricao', tensao = $tensao, catMarcenaria = $catMarcenaria, catJardinagem = $catJardinagem, catLimpeza = $catLimpeza, catEscritorio = $catEscritorio, catMecanica = $catMecanica, catOutros = $catOutros, qtde = $quantidade, valor = $valor, desconto = $desconto WHERE id = {$_GET['id']}";
+		$resultado = mysqli_query($conexao, $sql);
+		if($resultado){
+			$mensagem = "O produto <strong>$nome</strong> foi alterado com sucesso";
+		}
+		else{
+			$mensagem = "Erro. O produto não pôde ser alterado. ";
+			$mensagem .= mysqli_error($conexao); // para debug
+		}
+	} // count erros
+}
+else{ // carrega dados atuais
+	$sql = "select * from produto where id = {$_GET['id']}";
+	$resultado = mysqli_query($conexao, $sql);
+	$dados = mysqli_fetch_array($resultado);
+}
+
+include "cabecalhoAdm.php";
+include "../includes/functions.php";
+?>
+
+
+		<div class="container">
+			<main>
+				<h2>Alteração de Produtos</h2>
+				<?php
+				if (isset($mensagem)){
+					echo "<p>$mensagem</p>";
+				}
+				else{ // carrega form
+					if(isset($erros)){
+						echo "<ul>";
+						foreach ($erros as $erro){
+							echo "<li style='color: red;'>$erro</li>";
+						}
+						echo "</ul>";
+					}
+				?>
+				<form action="" method="post" id="form-cadastro" enctype="multipart/form-data" 
+				onsubmit="cadastroProduto()">
+					<div>
+						<fieldset>
+							<legend><strong>Dados do Produto</strong></legend>
+							<div class="form-item">
+								<label for="nome" class="label-alinhado">Nome:</label>
+								<input type="text" id="nome" name="nome" size="50" autofocus 
+								value="<?=isset($_POST['nome']) ? $_POST['nome'] : $dados['nome'];?>">								
+							</div>
+							
+							<div class="form-item">
+								<label for="fabricante" class="label-alinhado">Fabricante:</label>
+									<select name="fabricante" id="fabricante">
+										<option value="">Não informado</option>
+										<?php										
+										$sql = "select * from fabricante order by nome";
+										$resultado = mysqli_query($conexao, $sql);
+										while ($registro = mysqli_fetch_array($resultado)){	
+											echo "<option value='{$registro['id']}'";
+											if(isset($_POST['fabricante'])){
+												if($_POST['fabricante'] == $registro['id'])  
+												  echo " selected";	
+											}
+											else{
+												if($dados['idFabricante'] == $registro['id'])  
+												  echo " selected";	
+											}	  
+											echo ">{$registro['nome']}</option>";
+										}
+
+										?>									
+									</select>
+							</div>
+							
+							<div class="form-item">
+								<label for="arquivo" class="label-alinhado">Selecione uma imagem:</label>
+								<input type="file" name="arquivo" id="arquivo">
+								<small><em>* deixe em branco para manter a imagem atual</em></small>
+							    <div class="produto">								  
+									<figure>
+										<img src="../img/produtos/<?=mostraImagem($dados['imagem']);?>" alt="<?=$dados['nome'];?>">							
+									</figure>							
+							    </div> 								
+							</div>
+
+							<div class="form-item">
+								<label for="desc" class="label-alinhado">Descrição:</label>
+								<textarea name="descricao" rows="5" cols="30" id="desc">
+									<?=isset($_POST['descricao']) ? $_POST['descricao'] : $dados['descricao'];?></textarea>
+							</div>
+							<div class="form-item">
+								<label class="label-alinhado">Tensão: </label>
+								<?php
+								if (isset($_POST['tensao'])){
+									$tensao = $_POST['tensao']; 
+								}
+								else{
+									$tensao = $dados['tensao'];
+								}
+								// $tensao = (isset($_POST['tensao']))? $_POST['tensao'] : 0;
+								?>
+								<label><input type="radio" name="tensao" value="110" id="volt110" 
+									<?=($tensao == 110) ? "checked" : '';?>>110v</label>
+								<label><input type="radio" name="tensao" value="220" id="volt220"
+								<?=($tensao == 220) ? "checked" : '';?>>220v</label>							
+								<label><input type="radio" name="tensao" value="0" id="voltNone" 
+								<?=($tensao == 0) ? "checked" : '';?>>Não se aplica</label>
+							</div>
+							<div class="form-item">
+								<label class="label-alinhado">Categorias:</label>
+								<label><input type="checkbox" id="marcenaria" name="marcenaria" 
+									<?=isset($_POST['marcenaria'])? "checked":($dados['catMarcenaria'] == 1)? "checked": '';?>>Marcenaria</label>
+								<label><input type="checkbox" id="jardinagem" name="jardinagem"
+									<?=isset($_POST['jardinagem'])? "checked":($dados['catJardinagem'] == 1)? "checked": '';?>>Jardinagem</label>
+								<label><input type="checkbox" id="limpeza" name="limpeza"
+									<?=isset($_POST['limpeza'])? "checked":($dados['catLimpeza'] == 1)? "checked": '';?>>Limpeza</label>
+								<label><input type="checkbox" id="escritorio" name="escritorio"
+									<?=isset($_POST['escritorio'])? "checked":($dados['catEscritorio'] == 1)? "checked": '';?>>Escritório</label>
+								<label><input type="checkbox" id="mecanica" name="mecanica"
+									<?=isset($_POST['mecanica'])? "checked":($dados['catMecanica'] == 1)? "checked": '';?>>Mecânica</label>
+								<label><input type="checkbox" id="outros" name="outros"
+									<?=isset($_POST['outros'])? "checked":($dados['catOutros'] == 1)? "checked": '';?>>Outros</label>
+							</div>						
+						</fieldset>
+						<fieldset>
+							<legend><strong>Dados da locação</strong></legend>
+							<div class="form-item">
+								<label for="qntDis" class="label-alinhado">Quantidade Disponível:</label>
+								<input type="number" id="quantidade" name="quantidade" value="<?=isset($_POST['quantidade'])? $_POST['quantidade']:$dados['qtde'];?>" min="1">
+							</div>
+							<div class="form-item">
+								<label for="valor" class="label-alinhado">Valor da locação:</label>
+								<input type="text" id="valor" name="valor" placeholder="0.00" value="<?=isset($_POST['valor'])? $_POST['valor']:$dados['valor'];?>" 
+								onchange="calculaTotal()">
+							</div>
+							<div class="form-item">
+								<label for="desconto" class="label-alinhado">Desconto promocional:</label>
+								<input type="text" id="desconto" name="desconto" value="<?=isset($_POST['desconto'])? $_POST['desconto']:$dados['desconto'];?>" 
+								onchange="calculaTotal()">
+							</div>
+							<div class="form-item">						
+								<label for="total" class="label-alinhado">Total:</label>
+								<div id="total"><?=($dados['valor'] - $dados['desconto']);?></div>
+							</div>
+
+							<div class="form-item">
+						    	<label class="label-alinhado"></label>
+						    	<input type="submit" id="botao" value="Alterar" 
+						    	name="alterar">
+						    	<input type="reset" value="Redefinir">
+						    </div>						
+						</fieldset>
+					</div>
+				</form>
+				<?php
+			} // fecha else
+			?>
+			</main>	
+			<?php
+			include "asideAdm.php";
+			?>
+		
+		</div>
+		<section class="ultimos">
+			<h4>Últimos produtos cadastrados:</h4>
+			<table>
+				<tr>
+					<th>Nome</th>
+					<th>Fabricante</th>
+					<th>Valor da locação</th>
+				</tr>
+				<tr>
+					<td>Serra Elétrica</td>
+					<td>Makita</td>
+					<td>35.00</td>
+				</tr>
+				<tr>
+					<td>Lava a Jato</td>
+					<td>Trapp</td>
+					<td>28.00</td>
+				</tr>
+				<tr>
+					<td>Martelo</td>
+					<td>Bosch</td>
+					<td>6.00</td>
+				</tr>
+			</table>
+		</section>
+
+<?php
+include "rodapeAdm.php";
+?>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+		<title>Contato - ArtFlores</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="icon" type="image/jpg" href="img/logo.jpeg">
+		<link href="https://fonts.googleapis.com/css?family=EB+Garamond" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Marck+Script" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="css/style-content.css">
+		<link rel="stylesheet" type="text/css" href="css/style-HeaderFooter.css">
+	</head>
+	<body>
+		
+		<header>
+			<a href="index.html">
+				<h2 id="logo">Floricultura ArtFlores </h2>
+			</a>
+			<nav class="menu">
+				<p id="exibirMenu">&#9776; Menu</p>
+				<ul class="menu-opcoes">
+					<li> <a href="produtos.html">Produtos</a> </li>
+					<li> <a href="#">Serviços</a> </li>
+					<li> <a href="#">Portfólio</a> </li>
+					<li> <a href="#">Sobre nós</a> </li>
+					<li> <a href="contato.html">Contato</a> </li>
+				</ul>
+			</nav>
+		</header>
+
+		<section class="container-cont">
+			<div id="contato">
+				<h3 class='orcamento'>Solicite seu orçamento.</h3>
+				<form action="orcamento.php" method="post" id="form-contato">
+					<div class="form-item">
+						<label for="nome" class="label-alinhado">Nome:</label>
+						<input type="text" id="nome" name="nome" size="30" placeholder="Fulano da Silva Rodrigues">
+						<span class="msg-erro" id="msg-nome"></span>
+					</div>
+					<div class="form-item">
+						<label for="email" class="label-alinhado">Email:</label>
+						<input type="email" id="email" name="email" placeholder="exemplo@exemplo.com.br" size="30">
+						<span class="msg-erro" id="msg-email"></span>
+					</div>
+					<div class="form-item">
+						<label for="telefone" class="label-alinhado">Telefone Principal:</label>
+						<input type="text" id="telefone" name="telefone" placeholder="XX XXXXX XXXX" size="30">
+						<span class="msg-erro" id="msg-telefone"></span>
+					</div>
+					<div class="form-item">
+						<label for="telefone2" class="label-alinhado">Telefone Secundário:</label>
+						<input type="text" id="telefone2" name="telefone2" placeholder="XX XXXXX XXXX" size="30">
+						<span class="msg-erro" id="msg-telefone2"></span>
+					</div>
+					<div class="form-item">
+						<label class="label-alinhado">Atendimento:</label>
+						<label><input type="radio" id="atenOnline" name="atendimento" value="on">Online</label>
+						<label><input type="radio" id="atenDomes" name="atendimento" value="do">Doméstico</label>
+						<span class="msg-erro" id="msg-atend"></span>
+					</div>
+					<fieldset id="exibirField">
+						<legend>Dados de Endereço</legend>
+						<div class="form-item">
+							<label for="cidade" class="label-alinhado">Cidade:</label>
+							<select name="cidade" id="cidade">
+								<option value="">Selecione a cidade</option>
+								<option>Chapecó</option>
+								<option>São Carlos</option>
+								<option>Xanxerê</option>
+								<option>Xaxim</option>
+								<option>Coronel Freitas</option>
+								<option>Aguás de Chapecó</option>
+								<option>Outra</option>
+							</select>
+							<span class="msg-erro" id="msg-cidade"></span>
+						</div>
+						<div class="form-item">
+							<label for="bairro" class="label-alinhado">Bairro:</label>
+							<input type="text" id="bairro" name="bairro" size="30" placeholder="Ex: Centro">
+							<span class="msg-erro" id="msg-bairro"></span>
+						</div>	
+						<div class="form-item">
+							<label for="endereco" class="label-alinhado">Endereço: </label>
+							<input type="text" id="endereco" name="endereco" placeholder="Avenida Getúlio Gragas" size="30">
+							<span class="msg-erro" id="msg-endereco"></span>
+						</div>	
+						<div class="form-item">
+							<label for="num" class="label-alinhado">Número: </label>
+							<input type="text" id="num" name="num" placeholder="777" size="30">
+							<span class="msg-erro" id="msg-num"></span>
+						</div>
+					</fieldset>
+					<div class="form-item">
+						<label class="label-alinhado"></label>
+						<input type="submit" id="botao" value="Confirmar">
+						<input type="reset" name="Limpar">
+					</div>
+				</form>
+			</div>
+			<div id="localizacao">
+				<h3 class="orcamento">Se desejar, entre em contato conosco</h3>
+				<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1776.324554744595!2d-52.61257545983667!3d-27.07282169968494!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xae409cdb15e7cbc2!2sFloricultura+Artflores!5e0!3m2!1spt-BR!2sbr!4v1537450578163" width="400" height="300" style="border:0" allowfullscreen></iframe>
+				
+				<div id="nosso-contato">
+					<p><strong>Endereço:</strong> Rua Quatorze de Agosto, 3435 - E. Bairro Líder - Chapecó - SC</p>
+					<p><strong>Whatsapp:</strong> (49) 99922-4994</p>
+					<p><strong>Telefone:</strong> (49) 2020-0377</p>
+					<p><strong>Facebook:</strong> <a href=http://facebook.com/artfloreschapeco>facebook.com/artfloreschapeco</a></p>
+				</div>
+			</div>
+		</section>	
+
+		<footer>
+			<p>Floricultura ArtFlores - Chapecó/SC</p>
+			<a href="http://facebook.com/artfloreschapeco"><img src="img/facebook.png" alt="Facebook"></a>
+		</footer>
+		<script src="js/scripts.js"></script>
+		<script src="js/contato.js"></script>
+	</body>
+</html>

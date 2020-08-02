@@ -1,0 +1,83 @@
+/*          FORMATAÇÃO HEADER      */
+header, footer{
+	background-color: purple;
+	padding: 10px;
+	display: flex;
+	flex-direction: column;	
+	flex-wrap: wrap;
+	font-family: 'Marck Script', cursive;
+	font-size: 18pt;
+}	
+header a, #logo{
+	color: black;
+}
+header a{
+	display: flex;
+	flex-direction: row;
+}
+/*               NOME              */
+#areaSup{
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	height: 100px;
+}
+.nomes{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 50%;
+}
+/*               MENU              */
+#exibirMenu{
+	display: none;
+}
+.menu ul{ 
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+header li{
+	list-style-type: none;
+	padding: 5px;
+	margin-left: 20px;
+}
+header li:hover{
+	background-color: #a81a5c;
+}
+/*         FORMATAÇÃO RODAPE       */
+footer{
+	font-family: 'EB Garamond';
+	font-size: 20pt;
+	display: flex;
+	justify-content: space-around;
+}
+/*------------- Mobile ------------------*/
+@media only screen and (max-width: 600px){
+	#exibirMenu{
+		display: flex;
+	}
+	#logo, footer{
+		width: 100%;
+		font-size: 18pt;
+	}
+	.menu ul{
+		display: none;
+		flex-direction: column;
+	}
+
+	.opcao, .opcao img, .produto, .produto img{
+		width: 100%;
+	}
+
+	.container-cont{
+		flex-direction: column;
+	}
+	.orcamento, #localizacao{
+		width: 100%;
+	}
+	.label-alinhado{
+		width: 100%;
+		text-align: left;
+	}
+}
