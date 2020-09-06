@@ -1,0 +1,31 @@
+*{
+	margin: 0;
+}
+#container{
+	padding: 10px;
+	background-color: lightgray;
+	display: flex;
+	align-items: top;
+	justify-content: center;
+}
+tr, td, th{
+	border: 1px solid black;
+	padding: 5px;
+}
+tr:nth-child(even){
+	background-color: lightblue;
+}
+tr:nth-child(odd){
+	background-color: #f4e25a;
+}
+#sup{
+	background-color: lightgray;
+}
+#titulo{
+	font-size: 18pt;
+	text-align: center;
+}
+#tabela{
+	font-size: 14pt;
+	text-align: center;
+}
